@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.FilePathAttribute;
 
 namespace ChessReplay
 {
@@ -122,9 +123,50 @@ namespace ChessReplay
 
         public void PromotePawn(Vector3 endPosition, ReplayPiece pawn, ChessPieceType pieceType, int turnCount)
         {
-            /*
-             * Nadopuniti metodu logikom koja izvodi akciju promocije pijuna u odrabranu figuru definiranu parametrom pieceType.
-             */
+            pawn.gameObject.SetActive(false);
+
+            ReplayPiece promotedPiece = null;
+            switch (pieceType)
+            {
+                case ChessPieceType.WhiteQueen:
+                    promotedPiece = Instantiate(_whiteQueen);
+                    break;
+                case ChessPieceType.WhiteRook:
+                    promotedPiece = Instantiate(_whiteRook);
+                    break;
+                case ChessPieceType.WhiteBishop:
+                    promotedPiece = Instantiate(_whiteBishop);
+                    break;
+                case ChessPieceType.WhiteKnight:
+                    promotedPiece = Instantiate(_whiteKnight);
+                    break;
+                case ChessPieceType.BlackQueen:
+                    promotedPiece = Instantiate(_blackQueen);
+                    break;
+                case ChessPieceType.BlackRook:
+                    promotedPiece = Instantiate(_blackRook);
+                    break;
+                case ChessPieceType.BlackBishop:
+                    promotedPiece = Instantiate(_blackBishop);
+                    break;
+                case ChessPieceType.BlackKnight:
+                    promotedPiece = Instantiate(_blackKnight);
+                    break;
+            }
+
+            Vector3 position = new Vector3(endPosition.x * Offset, promotedPiece.transform.localPosition.y, endPosition.y * Offset);
+            promotedPiece.transform.localPosition = position;
+
+            if (!_promotedOnesDict.ContainsKey(turnCount))
+            {
+                _promotedOnesDict[turnCount] = new ReplayPiece[] { promotedPiece };
+            }
+            else
+            {
+                List<ReplayPiece> promotedList = new List<ReplayPiece>(_promotedOnesDict[turnCount]);
+                promotedList.Add(promotedPiece);
+                _promotedOnesDict[turnCount] = promotedList.ToArray();
+            }
         }
 
         /// <summary>
