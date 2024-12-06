@@ -159,9 +159,13 @@ namespace ChessMainLoop
             {
                 _winnerText.SetText("DRAW");
             }
+            else if (winner == SideColor.Black)
+            {
+                _winnerText.SetText("GOLD WINS");
+            }
             else
             {
-                _winnerText.SetText(winner+" WINS");
+                _winnerText.SetText("MARBLE WINS");
             }
         }
 
